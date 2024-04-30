@@ -1,0 +1,20 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: pod-azuredisk
+spec:
+  containers:
+    - image: mcr.microsoft.com/oss/kubernetes/pause:3.9-hotfix-20230808
+      imagePullPolicy: IfNotPresent
+      command:
+        - pause.exe
+      name: pod-azuredisk
+      volumeDevices:
+        - name: disk01
+          devicePath: 'c:\data'
+  nodeSelector:
+    kubernetes.io/os: windows
+  volumes:
+    - name: disk01
+      persistentVolumeClaim:
+        claimName: azure-managed-block
