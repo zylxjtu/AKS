@@ -1,0 +1,16 @@
+apiVersion: v1 
+kind: Pod
+metadata:
+  name: busyboxtest
+spec:
+  nodeSelector:
+    kubernetes.io/os: windows
+  containers:
+  - name: busyboxtestcontainer
+    image: registry.k8s.io/e2e-test-images/busybox:1.29-4
+    command:
+      - sleep
+      - "3600"
+    securityContext:
+      windowsOptions:
+        runAsUserName: "ContainerUser"

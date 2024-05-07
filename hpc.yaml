@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: hpc
+  labels:
+    app: hpc
+spec:
+  selector:
+    matchLabels:
+      app: hpc
+  template:
+    metadata:
+      labels:
+        app: hpc
+    spec:
+      nodeSelector:
+        kubernetes.io/os: windows
+      containers:
+        - name: hpc
+          image: containerrollingregistry.azurecr.io/hpc2022:1.4
+          securityContext:
+            windowsOptions:
+              hostProcess: true
+              runAsUserName: "NT AUTHORITY\\SYSTEM"
+          command: ["powershell", "-c", "c:/hpc/startMonagent.ps1 /subscriptions/1c8c4edc-b188-4199-9580-3173033d75f7/resourcegroups/wcct-agentbaker-test/providers/Microsoft.ManagedIdentity/userAssignedIdentities/wcct-agentbaker-identity 1c8c4edc-b188-4199-9580-3173033d75f7 yuanliangtest yuaniangaks 1.1"]
+          imagePullPolicy: IfNotPresent
+      hostNetwork: true
